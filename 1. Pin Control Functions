@@ -1,0 +1,122 @@
+Okay, clear karte hain! Ye sab Arduino ke **basic input-output functions** hain, jo microcontroller ke pins ko control karte hain. Har function ka use aur meaning samjha deta hoon sahi **code examples** ke saath.
+
+---
+
+### 1. **`pinMode()`**
+   - **Meaning:** Kisi pin ko **INPUT** ya **OUTPUT** mode me set karna.  
+     Agar hume ek pin par data lena hai (e.g., sensor ya button se), to **INPUT** karenge. Agar hume data bhejna hai (e.g., LED ya motor ko control karna), to **OUTPUT** karenge.
+   - **Use:**  
+     1. Button ke liye pin ko **INPUT** karte hain.  
+     2. LED ke liye pin ko **OUTPUT** karte hain.
+   - **Code Example:**
+     ```cpp
+     void setup() {
+       pinMode(2, INPUT);   // Pin 2 ko button read karne ke liye input banate hain
+       pinMode(13, OUTPUT); // Pin 13 ko LED ke liye output banate hain
+     }
+     ```
+
+---
+
+### 2. **`digitalWrite()`**
+   - **Meaning:** Kisi **digital output pin** par **HIGH (5V)** ya **LOW (0V)** signal bhejna.  
+     Use tab karte hain jab hume LED on/off karni ho ya koi device control karni ho.
+   - **Use:**  
+     1. LED ko on karne ke liye **HIGH** bhejna.  
+     2. LED ko off karne ke liye **LOW** bhejna.
+   - **Code Example:**
+     ```cpp
+     void setup() {
+       pinMode(13, OUTPUT); // Pin 13 ko LED ke liye output banate hain
+     }
+     
+     void loop() {
+       digitalWrite(13, HIGH); // LED on
+       delay(1000);            // 1 second wait
+       digitalWrite(13, LOW);  // LED off
+       delay(1000);            // 1 second wait
+     }
+     ```
+
+---
+
+### 3. **`digitalRead()`**
+   - **Meaning:** Kisi **digital input pin** se **HIGH** (5V) ya **LOW** (0V) signal read karna.  
+     Use tab karte hain jab hume button ya switch ka state check karna ho.
+   - **Use:**  
+     1. Button dabaya gaya hai ya nahi, check karte hain.
+   - **Code Example:**
+     ```cpp
+     void setup() {
+       pinMode(2, INPUT);    // Button ke liye pin 2 ko input banate hain
+       pinMode(13, OUTPUT);  // LED ke liye pin 13 ko output banate hain
+     }
+     
+     void loop() {
+       int buttonState = digitalRead(2); // Button ka state read karein
+       if (buttonState == HIGH) {
+         digitalWrite(13, HIGH); // Button dabaya, LED on
+       } else {
+         digitalWrite(13, LOW);  // Button nahi dabaya, LED off
+       }
+     }
+     ```
+
+---
+
+### 4. **`analogWrite()`**
+   - **Meaning:** Pin par **PWM signal** bhejna (0 se 255 ke beech value).  
+     PWM ka use LED ki brightness ya motor ki speed control karne ke liye hota hai.
+   - **Use:**  
+     1. LED ki brightness ya motor speed adjust karte hain.
+   - **Code Example:**
+     ```cpp
+     void setup() {
+       pinMode(9, OUTPUT); // Pin 9 ko PWM ke liye output banate hain
+     }
+
+     void loop() {
+       for (int i = 0; i <= 255; i++) {
+         analogWrite(9, i);  // LED brightness gradually badhao
+         delay(10);
+       }
+       for (int i = 255; i >= 0; i--) {
+         analogWrite(9, i);  // LED brightness gradually ghatao
+         delay(10);
+       }
+     }
+     ```
+
+---
+
+### 5. **`analogRead()`**
+   - **Meaning:** Kisi **analog pin** se voltage read karna (0-1023 range).  
+     Use tab karte hain jab sensor ki value lena ho (e.g., potentiometer, temperature sensor).
+   - **Use:**  
+     1. Sensor ya potentiometer ki value read karte hain.
+   - **Code Example:**
+     ```cpp
+     void setup() {
+       Serial.begin(9600); // Serial monitor ke liye initialize
+     }
+
+     void loop() {
+       int sensorValue = analogRead(A0); // Sensor value read karein pin A0 se
+       Serial.println(sensorValue);     // Serial monitor par value print karein
+       delay(500);                      // 0.5 second wait
+     }
+     ```
+
+---
+
+### **Summary Table:**
+
+| Function             | Use Case                             | Example Use Case                     |
+|----------------------|--------------------------------------|--------------------------------------|
+| **`pinMode()`********| Pin ko input ya output set karein    | Button input, LED output             |
+| **`digitalWrite()`** | Pin par HIGH/LOW bheje               | LED on/off                           |
+| **`digitalRead()`**  | Pin se HIGH/LOW read karein          | Button ka state check karein         |
+| **`analogWrite()`**  | PWM signal bheje (0-255)             | LED brightness, motor speed          |
+| **`analogRead()`**   | Analog pin ki value read karein      | Sensor value (0-1023) read karein    | 
+
+I hope ab ye clear ho gaya! Koi aur confusion hai to poochho! 😊
