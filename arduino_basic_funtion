@@ -1,5 +1,26 @@
 Here is a list of Arduino functions with single-line examples:
 
+Arduino mein use hone wale kuch common functions ke liye single-line explanations:
+
+1. **pinMode()**: A pin ko input ya output mode mein set karta hai.
+2. **digitalWrite()**: Digital pin par high ya low value write karta hai.
+3. **digitalRead()**: Digital pin se input value (high ya low) read karta hai.
+4. **analogWrite()**: PWM signal (analog-like signal) kisi pin par output karta hai.
+7. **millis()**: Arduino ke start hone ke baad se milliseconds mein time dikhata hai.
+8. **Serial.begin()**: Serial communication ko start karta hai, ek baud rate specify karke.
+9. **Serial.print()**: Serial monitor par text ya values print karta hai.
+10. **Serial.read()**: Serial input se ek byte read karta hai.
+11. **attachInterrupt()**: Interrupt ko enable karta hai, jab ek specific pin par event ho.
+12. **detachInterrupt()**: Interrupt ko disable karta hai.
+13. **shiftOut()**: Data ko shift registers ke through output karta hai.
+14. **tone()**: Piezo buzzer ko sound produce karne ke liye signal bhejta hai.
+15. **noTone()**: Piezo buzzer se sound stop karta hai.
+16. **random()**: Random number generate karta hai.
+17. **map()**: Ek range ke number ko doosri range mein convert karta hai.
+18. **constrain()**: Ek value ko specified range ke andar constrain karta hai.
+19. **sqrt()**: Kisi number ka square root calculate karta hai.
+20. **abs()**: Kisi number ka absolute value return karta hai.
+
 1. **pinMode()**: Sets a pin as input or output.
    ```arduino
    pinMode(13, OUTPUT);  // Set pin 13 as an output
@@ -206,3 +227,7 @@ Here is a list of Arduino functions with single-line examples:
     ```
 
 These are various functions in Arduino with concise one-liner examples.
+
+
+
+
