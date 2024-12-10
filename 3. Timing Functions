@@ -1,0 +1,144 @@
+Yeh functions **Arduino timing and delays** ke liye use hote hain. Ye board ko specific time tak rokne, ya time measurement karne me madad karte hain. Inka **meaning**, **use**, **syntax**, aur **example** step-by-step samajhte hain.
+
+---
+
+### 1. **`delay()`**  
+#### Kya hai:
+- Program execution ko **specified milliseconds** ke liye rokh deta hai.
+#### Kaha use hota hai:
+- Jab ek certain time ke liye pause karna ho, jaise LED blink ke beech delay.
+
+#### Syntax:
+```cpp
+delay(milliseconds);
+```
+
+#### Example:
+```cpp
+void setup() {
+  pinMode(13, OUTPUT); // Set pin 13 as output
+}
+
+void loop() {
+  digitalWrite(13, HIGH); // LED ON
+  delay(1000);            // Wait for 1 second
+  digitalWrite(13, LOW);  // LED OFF
+  delay(1000);            // Wait for 1 second
+}
+```
+- **Output:** LED ek second ke liye on aur ek second ke liye off hoga.
+
+---
+
+### 2. **`delayMicroseconds()`**  
+#### Kya hai:
+- Program execution ko **specified microseconds** (1 microsecond = 1/1,000,000 second) ke liye rokh deta hai.
+#### Kaha use hota hai:
+- Jab short time delay chahiye ho, jaise high-speed signal ya pulses ke liye.
+
+#### Syntax:
+```cpp
+delayMicroseconds(microseconds);
+```
+
+#### Example:
+```cpp
+void setup() {
+  pinMode(13, OUTPUT); // Set pin 13 as output
+}
+
+void loop() {
+  digitalWrite(13, HIGH); // LED ON
+  delayMicroseconds(500); // Wait for 500 microseconds
+  digitalWrite(13, LOW);  // LED OFF
+  delayMicroseconds(500); // Wait for 500 microseconds
+}
+```
+- **Output:** LED fast blink karega (human eye se detect nahi hoga).
+
+---
+
+### 3. **`millis()`**  
+#### Kya hai:
+- **Time in milliseconds** (1/1000 second) return karta hai jo Arduino board ne program shuru hone ke baad count kiya.
+#### Kaha use hota hai:
+- Jab time-based tasks karne ho bina `delay()` function ka use kiye. Non-blocking delays ke liye.
+
+#### Syntax:
+```cpp
+unsigned long time = millis();
+```
+
+#### Example:
+```cpp
+unsigned long previousMillis = 0; // Store last time LED state changed
+const long interval = 1000;       // Time interval of 1 second
+
+void setup() {
+  pinMode(13, OUTPUT); // Set pin 13 as output
+}
+
+void loop() {
+  unsigned long currentMillis = millis(); // Get current time
+  
+  if (currentMillis - previousMillis >= interval) { // If 1 second passed
+    previousMillis = currentMillis; // Update previous time
+    digitalWrite(13, !digitalRead(13)); // Toggle LED state
+  }
+}
+```
+- **Output:** LED har second toggle karega bina delay() ka use kiye.
+
+---
+
+### 4. **`micros()`**  
+#### Kya hai:
+- **Time in microseconds** (1/1,000,000 second) return karta hai jo Arduino board ne program shuru hone ke baad count kiya.
+#### Kaha use hota hai:
+- Jab precise timing aur high-speed operations chahiye ho, jaise pulse width ya timing measurement.
+
+#### Syntax:
+```cpp
+unsigned long time = micros();
+```
+
+#### Example:
+```cpp
+unsigned long startTime;
+
+void setup() {
+  Serial.begin(9600); // Initialize Serial communication
+  startTime = micros(); // Capture starting time
+}
+
+void loop() {
+  unsigned long elapsedTime = micros() - startTime; // Calculate elapsed time
+  if (elapsedTime >= 1000000) { // 1 second in microseconds
+    Serial.println("1 second elapsed");
+    startTime = micros(); // Reset start time
+  }
+}
+```
+- **Output:** Serial monitor me har second "1 second elapsed" print hoga.
+
+---
+
+### **Summary Table**
+
+| **Function**              | **Purpose**                                     | **Typical Use**                     |
+|---------------------------|-------------------------------------------------|-------------------------------------|
+| **`delay()`**             | Milliseconds delay                              | Simple task pauses (LED blink)     |
+| **`delayMicroseconds()`** | Microseconds delay                              | Short and precise delays (pulses)  |
+| **`millis()`**            | Returns elapsed milliseconds                    | Time-based tasks (non-blocking)    |
+| **`micros()`**            | Returns elapsed microseconds                    | High-precision time measurements   |
+
+---
+
+### **When to Use Which Function**
+
+1. **Use `delay()`** when you want **simple pauses** in your program (e.g., blink an LED).  
+2. **Use `delayMicroseconds()`** for **short and precise delays**, especially in high-speed signal control.  
+3. **Use `millis()`** for **non-blocking tasks**, such as multitasking without pausing your program.  
+4. **Use `micros()`** for **precise timing** in microsecond-level accuracy, such as measuring pulse width.
+
+Agar aur detailed examples chahiye, feel free to ask! 😊
