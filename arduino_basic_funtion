@@ -1,0 +1,208 @@
+Here is a list of Arduino functions with single-line examples:
+
+1. **pinMode()**: Sets a pin as input or output.
+   ```arduino
+   pinMode(13, OUTPUT);  // Set pin 13 as an output
+   ```
+
+2. **digitalWrite()**: Writes a HIGH or LOW value to a pin.
+   ```arduino
+   digitalWrite(13, HIGH);  // Set pin 13 to HIGH
+   ```
+
+3. **digitalRead()**: Reads the value from a digital pin (HIGH or LOW).
+   ```arduino
+   int value = digitalRead(7);  // Read pin 7
+   ```
+
+4. **analogWrite()**: Writes an analog value (PWM) to a pin.
+   ```arduino
+   analogWrite(9, 128);  // Set pin 9 to PWM value 128
+   ```
+
+5. **analogRead()**: Reads an analog input (0-1023).
+   ```arduino
+   int sensorValue = analogRead(A0);  // Read analog pin A0
+   ```
+
+6. **delay()**: Pauses the program for a specified time in milliseconds.
+   ```arduino
+   delay(1000);  // Wait for 1 second
+   ```
+
+7. **millis()**: Returns the number of milliseconds since the Arduino started.
+   ```arduino
+   unsigned long time = millis();  // Get current time in milliseconds
+   ```
+
+8. **Serial.begin()**: Initializes serial communication at a specified baud rate.
+   ```arduino
+   Serial.begin(9600);  // Start serial communication at 9600 baud
+   ```
+
+9. **Serial.print()**: Prints data to the serial monitor.
+   ```arduino
+   Serial.print("Hello, World!");  // Print message
+   ```
+
+10. **Serial.read()**: Reads incoming data from the serial port.
+    ```arduino
+    char data = Serial.read();  // Read a byte from the serial buffer
+    ```
+
+11. **attachInterrupt()**: Sets up an interrupt on a pin.
+    ```arduino
+    attachInterrupt(digitalPinToInterrupt(2), myISR, FALLING);  // Trigger interrupt on pin 2
+    ```
+
+12. **detachInterrupt()**: Disables an interrupt on a pin.
+    ```arduino
+    detachInterrupt(digitalPinToInterrupt(2));  // Disable interrupt on pin 2
+    ```
+
+13. **shiftOut()**: Shifts out data to a shift register.
+    ```arduino
+    shiftOut(dataPin, clockPin, MSBFIRST, 255);  // Send 255 (11111111) to the shift register
+    ```
+
+14. **tone()**: Generates a tone on a pin.
+    ```arduino
+    tone(8, 1000);  // Play a 1000Hz tone on pin 8
+    ```
+
+15. **noTone()**: Stops the tone on a pin.
+    ```arduino
+    noTone(8);  // Stop tone on pin 8
+    ```
+
+16. **random()**: Generates a random number.
+    ```arduino
+    int randNum = random(1, 100);  // Generate a random number between 1 and 100
+    ```
+
+17. **randomSeed()**: Sets the seed for the random number generator.
+    ```arduino
+    randomSeed(analogRead(0));  // Use analog input for random seed
+    ```
+
+18. **map()**: Maps a number from one range to another.
+    ```arduino
+    int mappedValue = map(50, 0, 100, 0, 255);  // Map 50 from range 0-100 to 0-255
+    ```
+
+19. **constrain()**: Constrains a value to a specified range.
+    ```arduino
+    int constrainedValue = constrain(150, 0, 100);  // Constrain 150 to the range 0-100
+    ```
+
+20. **abs()**: Returns the absolute value of a number.
+    ```arduino
+    int absValue = abs(-10);  // Returns 10
+    ```
+
+21. **sin()**: Calculates the sine of an angle (in radians).
+    ```arduino
+    float sineValue = sin(PI / 2);  // Sine of 90 degrees
+    ```
+
+22. **cos()**: Calculates the cosine of an angle (in radians).
+    ```arduino
+    float cosValue = cos(PI);  // Cosine of 180 degrees
+    ```
+
+23. **delayMicroseconds()**: Pauses the program for a specified time in microseconds.
+    ```arduino
+    delayMicroseconds(500);  // Wait for 500 microseconds
+    ```
+
+24. **noInterrupts()**: Disables interrupts temporarily.
+    ```arduino
+    noInterrupts();  // Disable interrupts
+    ```
+
+25. **interrupts()**: Enables interrupts after they were disabled.
+    ```arduino
+    interrupts();  // Enable interrupts
+    ```
+
+26. **sizeof()**: Returns the size of a variable in bytes.
+    ```arduino
+    Serial.print(sizeof(int));  // Prints the size of an int in bytes
+    ```
+
+27. **bitWrite()**: Sets a specific bit of a number to 1 or 0.
+    ```arduino
+    byte data = 0b00000000;
+    bitWrite(data, 3, 1);  // Set the 3rd bit to 1
+    ```
+
+28. **bitRead()**: Reads a specific bit of a number.
+    ```arduino
+    byte data = 0b00001000;
+    int bitValue = bitRead(data, 3);  // Reads the 3rd bit (value is 1)
+    ```
+
+29. **bitSet()**: Sets a specific bit of a number to 1.
+    ```arduino
+    byte data = 0b00000000;
+    bitSet(data, 5);  // Set the 5th bit to 1
+    ```
+
+30. **bitClear()**: Clears (sets to 0) a specific bit of a number.
+    ```arduino
+    byte data = 0b11111111;
+    bitClear(data, 2);  // Clear the 2nd bit (value becomes 0b11111011)
+    ```
+
+31. **pulseIn()**: Measures the duration of a pulse in microseconds.
+    ```arduino
+    int duration = pulseIn(7, HIGH);  // Measure HIGH pulse on pin 7
+    ```
+
+32. **attach()**: Attaches a servo to a pin.
+    ```arduino
+    Servo myServo;
+    myServo.attach(9);  // Attach servo on pin 9
+    ```
+
+33. **write()**: Sets a servo angle.
+    ```arduino
+    myServo.write(90);  // Set servo to 90 degrees
+    ```
+
+34. **detach()**: Detaches a servo from a pin.
+    ```arduino
+    myServo.detach();  // Detach the servo
+    ```
+
+35. **float()**: Converts a value to float.
+    ```arduino
+    float num = float(10);  // Convert integer 10 to float
+    ```
+
+36. **sqrt()**: Calculates the square root of a number.
+    ```arduino
+    float result = sqrt(16);  // Returns 4
+    ```
+
+37. **pow()**: Raises a number to a power.
+    ```arduino
+    float result = pow(2, 3);  // Returns 8
+    ```
+
+38. **exp()**: Calculates the exponential (e^x) of a number.
+    ```arduino
+    float result = exp(1);  // Returns e (approx 2.718)
+    ```
+
+39. **log()**: Calculates the natural logarithm (ln) of a number.
+    ```arduino
+    float result = log(10);  // Returns natural log of 10
+    ```
+
+40. **log10()**: Calculates the logarithm to base 10.
+    ```arduino
+    float result = log10(100);  // Returns log base 10 of 100
+    ```
+
+These are various functions in Arduino with concise one-liner examples.
