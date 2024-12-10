@@ -1,0 +1,142 @@
+`Timer1` ek Arduino library hai jo 16-bit timer (Timer1) ko control karne ke liye use hota hai. Timer1 ka use time delays, periodic tasks, aur interrupts ko handle karne ke liye kiya jata hai. `Timer1` library se aap low-level time-based operations ko handle kar sakte hain jo `delay()` function se jyada precise aur efficient hote hain.
+
+### Timer1 ke Functions:
+
+1. **Timer1.initialize()**
+2. **Timer1.attachInterrupt()**
+3. **Timer1.stop()**
+
+Aaiye, in functions ko step-by-step samjhte hain.
+
+### 1. **Timer1.initialize()**
+   - **Purpose**: Ye function Timer1 ko initialize karta hai aur usse specific time period pe configure karta hai. Aap timer ka time period microseconds mein define kar sakte hain.
+   - **Syntax**:
+     ```cpp
+     Timer1.initialize(period);
+     ```
+     - `period`: Ye time period hai (in microseconds) jiske baad Timer1 interrupt trigger hoga.
+   - **Usage**: Timer1 ko ek specific time period pe setup karne ke liye is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Timer1.initialize(1000000);  // Timer1 ko 1 second (1000000 microseconds) ke liye initialize karte hain
+   ```
+
+### 2. **Timer1.attachInterrupt()**
+   - **Purpose**: Ye function ek interrupt handler function ko Timer1 ke sath attach karta hai. Jab Timer1 specified time period (microseconds) complete karta hai, to ye interrupt function ko call karega.
+   - **Syntax**:
+     ```cpp
+     Timer1.attachInterrupt(function);
+     ```
+     - `function`: Ye wo function hai jo timer interrupt ke complete hone par call hoga.
+   - **Usage**: Timer1 interrupt ko handle karne ke liye aap is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Timer1.attachInterrupt(myInterrupt);  // Timer1 interrupt ke liye 'myInterrupt' function ko attach karte hain
+   ```
+
+   **Interrupt Handler Function Example**:
+   ```cpp
+   void myInterrupt() {
+     // Interrupt hone par jo kaam karna hai wo yahan likhenge
+     // Jaise LED blink karna
+     digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));  // LED ko toggle karte hain
+   }
+   ```
+
+### 3. **Timer1.stop()**
+   - **Purpose**: Ye function Timer1 ko stop karne ke liye use hota hai, yani timer ko disable kar deta hai aur interrupts ko band kar deta hai.
+   - **Syntax**:
+     ```cpp
+     Timer1.stop();
+     ```
+   - **Usage**: Agar aapko timer ko kisi specific condition ke baad stop karna ho, toh is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Timer1.stop();  // Timer1 ko stop karte hain
+   ```
+
+### Full Example: LED Blink Using Timer1 (Interrupts)
+
+Is example mein, hum `Timer1` ka use karke ek LED ko blink karenge. Timer1 har 1 second baad interrupt trigger karega aur LED ko toggle karega.
+
+```cpp
+#include <TimerOne.h>
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);  // LED pin ko output mode mein set karte hain
+  Timer1.initialize(1000000);  // Timer1 ko 1 second (1000000 microseconds) ke liye initialize karte hain
+  Timer1.attachInterrupt(blinkLED);  // Timer1 ke interrupt ke liye 'blinkLED' function ko attach karte hain
+}
+
+void loop() {
+  // Main loop mein koi code nahi hoga, sab kuch interrupt se handle hoga
+}
+
+void blinkLED() {
+  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));  // LED ko toggle karte hain
+}
+```
+
+### Step-by-Step Explanation:
+1. **Pin Setup**: 
+   - `pinMode(LED_BUILTIN, OUTPUT);` se hum Arduino ke built-in LED pin ko output mode mein set karte hain.
+
+2. **Timer Initialization**: 
+   - `Timer1.initialize(1000000);` se Timer1 ko 1 second (1000000 microseconds) ke liye initialize karte hain. Timer1 har 1 second baad interrupt trigger karega.
+
+3. **Attach Interrupt**: 
+   - `Timer1.attachInterrupt(blinkLED);` se hum Timer1 ko `blinkLED` function ke saath attach karte hain. Jab Timer1 interrupt trigger karega, `blinkLED` function execute hoga.
+
+4. **Interrupt Handler (blinkLED)**: 
+   - `blinkLED()` function mein hum `digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));` ka use karke LED ko toggle karte hain. Matlab agar LED off hai to on ho jayega, aur agar on hai to off ho jayega.
+
+5. **Loop**: 
+   - `loop()` function mein koi kaam nahi hota kyunki saara kaam timer interrupt handle karta hai.
+
+### Example 2: Timer1 Stop After Few Intervals
+Is example mein hum Timer1 ko kuch time baad stop karenge.
+
+```cpp
+#include <TimerOne.h>
+
+void setup() {
+  pinMode(LED_BUILTIN, OUTPUT);  // LED pin ko output mode mein set karte hain
+  Timer1.initialize(1000000);  // Timer1 ko 1 second ke liye initialize karte hain
+  Timer1.attachInterrupt(blinkLED);  // Timer1 ke interrupt ke liye 'blinkLED' function ko attach karte hain
+}
+
+void loop() {
+  delay(5000);  // 5 seconds ke liye wait karte hain
+  Timer1.stop();  // Timer1 ko stop kar dete hain
+}
+
+void blinkLED() {
+  digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));  // LED ko toggle karte hain
+}
+```
+
+### Step-by-Step Explanation:
+1. **Pin Setup**: 
+   - `pinMode(LED_BUILTIN, OUTPUT);` se hum Arduino ke built-in LED pin ko output mode mein set karte hain.
+
+2. **Timer Initialization**: 
+   - `Timer1.initialize(1000000);` se Timer1 ko 1 second ke liye initialize karte hain.
+
+3. **Attach Interrupt**: 
+   - `Timer1.attachInterrupt(blinkLED);` se hum Timer1 ko `blinkLED` function ke saath attach karte hain.
+
+4. **Timer Stop**: 
+   - `delay(5000);` se 5 seconds ke liye wait karte hain aur uske baad `Timer1.stop();` se Timer1 ko stop kar dete hain.
+
+5. **Interrupt Handler (blinkLED)**: 
+   - Jab Timer1 interrupt trigger karega, `blinkLED()` function execute hoga aur LED ko toggle karega.
+
+### Summary:
+- **Timer1.initialize(period)**: Timer1 ko specified time period (in microseconds) ke liye initialize karta hai.
+- **Timer1.attachInterrupt(function)**: Timer1 ke interrupt ke liye specified function ko attach karta hai.
+- **Timer1.stop()**: Timer1 ko stop karne ke liye use hota hai, matlab timer ko disable karna aur interrupts ko band karna.
+
+In functions ka use aap periodic tasks ko efficiently handle karne ke liye kar sakte hain, jahan aapko precise time intervals aur interrupts ki zarurat hoti hai.
