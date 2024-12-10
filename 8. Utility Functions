@@ -1,0 +1,157 @@
+Ye sab functions Arduino programming language mein use hote hain, jo low-level operations ke liye hote hain. In functions ka istemal mainly bits aur bytes ko manipulate karne ke liye kiya jata hai. Main aapko har ek function ka explanation deta hoon:
+
+### 1. **bitWrite()**
+   - **Purpose**: Is function ka use kisi specific bit ko write karne ke liye kiya jata hai.
+   - **Syntax**:
+     ```cpp
+     bitWrite(number, bit, value);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit ko write karna chahte ho (0 ya 1 se bit change hoga).
+     - `bit`: Kaunsa bit change karna hai (0 se leke 7 tak).
+     - `value`: Jo value aap bit pe likhna chahte ho (0 ya 1).
+   - **Example**:
+     ```cpp
+     int num = 0b00000000;  // 8-bit number
+     bitWrite(num, 3, 1);    // 3rd bit ko 1 karna
+     Serial.println(num, BIN);  // Output: 00001000
+     ```
+
+### 2. **bitRead()**
+   - **Purpose**: Is function ka use kisi specific bit ko read karne ke liye kiya jata hai.
+   - **Syntax**:
+     ```cpp
+     bitRead(number, bit);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit ko read karna chahte ho.
+     - `bit`: Kaunsa bit read karna hai (0 se leke 7 tak).
+   - **Example**:
+     ```cpp
+     int num = 0b00001000;
+     int bitValue = bitRead(num, 3);  // 3rd bit ko read karna
+     Serial.println(bitValue);  // Output: 1
+     ```
+
+### 3. **bitSet()**
+   - **Purpose**: Is function ka use kisi specific bit ko `1` set karne ke liye hota hai.
+   - **Syntax**:
+     ```cpp
+     bitSet(number, bit);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit ko set karna chahte ho.
+     - `bit`: Kaunsa bit set karna hai (0 se leke 7 tak).
+   - **Example**:
+     ```cpp
+     int num = 0b00000000;
+     bitSet(num, 4);   // 4th bit ko 1 karna
+     Serial.println(num, BIN);  // Output: 00010000
+     ```
+
+### 4. **bitClear()**
+   - **Purpose**: Is function ka use kisi specific bit ko `0` clear karne ke liye hota hai.
+   - **Syntax**:
+     ```cpp
+     bitClear(number, bit);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit ko clear karna chahte ho.
+     - `bit`: Kaunsa bit clear karna hai (0 se leke 7 tak).
+   - **Example**:
+     ```cpp
+     int num = 0b11111111;
+     bitClear(num, 4);  // 4th bit ko 0 karna
+     Serial.println(num, BIN);  // Output: 11110111
+     ```
+
+### 5. **bit()**
+   - **Purpose**: Is function ka use kisi number ko convert karne ke liye hota hai, taki uss number ko ek bit pattern ke roop mein represent kiya ja sake.
+   - **Syntax**:
+     ```cpp
+     bit(number);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit set karna chahte ho.
+   - **Example**:
+     ```cpp
+     int value = 3;  // Binary representation: 00000011
+     int result = bit(value);  // Convert number to bit pattern
+     Serial.println(result, BIN);  // Output: 00000011
+     ```
+
+### 6. **lowByte()**
+   - **Purpose**: Is function ka use kisi 16-bit number ke low byte ko extract karne ke liye hota hai.
+   - **Syntax**:
+     ```cpp
+     lowByte(number);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap low byte ko extract karna chahte ho.
+   - **Example**:
+     ```cpp
+     int value = 0x1234;
+     int low = lowByte(value);  // Low byte: 0x34
+     Serial.println(low, HEX);  // Output: 34
+     ```
+
+### 7. **highByte()**
+   - **Purpose**: Is function ka use kisi 16-bit number ke high byte ko extract karne ke liye hota hai.
+   - **Syntax**:
+     ```cpp
+     highByte(number);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap high byte ko extract karna chahte ho.
+   - **Example**:
+     ```cpp
+     int value = 0x1234;
+     int high = highByte(value);  // High byte: 0x12
+     Serial.println(high, HEX);  // Output: 12
+     ```
+
+### 8. **bitMap()**
+   - **Purpose**: Ye ek macro hai jo bit manipulation ke liye use hota hai. Yeh kisi bhi byte ko manipulate karne ke liye use kiya jata hai.
+   - **Syntax**:
+     ```cpp
+     bitMap(number, bit, mask);
+     ```
+   - **Parameters**:
+     - `number`: Jisme aap bit manipulation karna chahte ho.
+     - `bit`: Jo bit manipulate karna hai.
+     - `mask`: Bitwise operation mask.
+
+### Summary Example:
+```cpp
+void setup() {
+  Serial.begin(9600);
+
+  // bitWrite example
+  int num = 0b00000000;
+  bitWrite(num, 3, 1);
+  Serial.println(num, BIN);  // Output: 00001000
+
+  // bitRead example
+  int bitValue = bitRead(num, 3);  
+  Serial.println(bitValue);  // Output: 1
+
+  // bitSet example
+  bitSet(num, 4);
+  Serial.println(num, BIN);  // Output: 00011000
+
+  // bitClear example
+  bitClear(num, 4);
+  Serial.println(num, BIN);  // Output: 00001000
+
+  // lowByte and highByte example
+  int value = 0x1234;
+  Serial.println(lowByte(value), HEX);  // Output: 34
+  Serial.println(highByte(value), HEX);  // Output: 12
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+}
+```
+
+Is example mein, sabhi functions ka istemal karke aap dekh sakte ho ki kaise bit operations hoti hain. Ye functions mostly Arduino boards ko control karte waqt sensors, motors, ya kisi bhi device ke sath work karte hue useful hote hain.
