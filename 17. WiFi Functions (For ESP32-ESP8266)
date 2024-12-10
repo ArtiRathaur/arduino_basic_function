@@ -1,0 +1,158 @@
+`WiFi` library ka use Arduino-based WiFi modules (jaise ESP8266, ESP32) ke saath wireless connectivity establish karne ke liye hota hai. Ye functions aapko WiFi connection ko manage karne aur WiFi network ke status ko track karne mein madad karte hain. Aaiye, in functions ko detail mein samjhte hain:
+
+### 1. **WiFi.begin()**
+   - **Purpose**: Ye function WiFi connection ko initiate karta hai. Isse aap apne WiFi module ko kisi specific network se connect kar sakte hain.
+   - **Syntax**:
+     ```cpp
+     WiFi.begin(ssid, password);
+     ```
+     - `ssid`: Ye WiFi network ka naam (SSID) hota hai jisse aap connect hona chahte hain.
+     - `password`: Ye WiFi network ka password hota hai, agar WiFi secured hai.
+   - **Usage**: Jab aapko kisi WiFi network se connect karna ho, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   WiFi.begin("your_SSID", "your_PASSWORD");  // WiFi network se connect karte hain
+   ```
+
+### 2. **WiFi.status()**
+   - **Purpose**: Ye function current WiFi connection ka status return karta hai. Isse aapko pata chal sakta hai ki aapka device WiFi network se connected hai ya nahi.
+   - **Syntax**:
+     ```cpp
+     int status = WiFi.status();
+     ```
+     - `status`: Ye function WiFi connection ke current status ko return karta hai. Possible status values are:
+       - `WL_CONNECTED`: Device connected to WiFi.
+       - `WL_IDLE_STATUS`: WiFi module idle hai.
+       - `WL_NO_SSID_AVAIL`: SSID available nahi hai.
+       - `WL_CONNECT_FAILED`: Connection failed.
+       - `WL_DISCONNECTED`: WiFi disconnected hai.
+   - **Usage**: Jab aapko WiFi connection ka status check karna ho, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   int wifiStatus = WiFi.status();
+   if (wifiStatus == WL_CONNECTED) {
+     Serial.println("Connected to WiFi!");
+   } else {
+     Serial.println("Not connected to WiFi!");
+   }
+   ```
+
+### 3. **WiFi.localIP()**
+   - **Purpose**: Ye function aapko WiFi module ka local IP address return karta hai. Jab WiFi module successfully connect ho jata hai, toh ye function uska IP address return karta hai.
+   - **Syntax**:
+     ```cpp
+     IPAddress ip = WiFi.localIP();
+     ```
+   - **Usage**: Jab aapko apne WiFi module ka local IP address chahiye, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   IPAddress ip = WiFi.localIP();
+   Serial.print("Local IP Address: ");
+   Serial.println(ip);
+   ```
+
+### 4. **WiFi.macAddress()**
+   - **Purpose**: Ye function WiFi module ki unique MAC address ko return karta hai. MAC address har device ka unique identifier hota hai.
+   - **Syntax**:
+     ```cpp
+     String macAddress = WiFi.macAddress();
+     ```
+   - **Usage**: Jab aapko WiFi module ka MAC address chahiye, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   String mac = WiFi.macAddress();
+   Serial.print("MAC Address: ");
+   Serial.println(mac);
+   ```
+
+### 5. **WiFi.disconnect()**
+   - **Purpose**: Ye function WiFi connection ko disconnect karta hai. Jab aap WiFi network se disconnect karna chahte hain, tab is function ka use karte hain.
+   - **Syntax**:
+     ```cpp
+     WiFi.disconnect();
+     ```
+   - **Usage**: Jab aapko WiFi se disconnect karna ho, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   WiFi.disconnect();  // WiFi connection ko disconnect karte hain
+   ```
+
+---
+
+### Full Example: Connecting to WiFi and Checking Status
+
+Is example mein, hum WiFi module ko connect karenge ek WiFi network se, aur uska status check karenge. Agar connected hai, toh local IP address aur MAC address print karenge, aur agar disconnected hai, toh reconnect karenge.
+
+```cpp
+#include <WiFi.h>  // WiFi library include karte hain
+
+const char* ssid = "your_SSID";        // WiFi network ka SSID
+const char* password = "your_PASSWORD"; // WiFi network ka password
+
+void setup() {
+  Serial.begin(115200);  // Serial monitor ko initialize karte hain
+
+  WiFi.begin(ssid, password);  // WiFi network se connect karte hain
+  Serial.println("Connecting to WiFi...");
+
+  // WiFi connection status check karte hain
+  int counter = 0;
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    counter++;
+    if (counter > 10) {
+      Serial.println("Failed to connect. Retrying...");
+      WiFi.disconnect();  // Disconnect karte hain aur dobara try karte hain
+      WiFi.begin(ssid, password);  // Dobara connect karte hain
+      counter = 0;
+    }
+  }
+
+  // WiFi connected hone par IP aur MAC address print karte hain
+  Serial.println("Connected to WiFi!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+  Serial.print("MAC Address: ");
+  Serial.println(WiFi.macAddress());
+}
+
+void loop() {
+  // Main loop mein koi kaam nahi hai
+}
+```
+
+### Step-by-Step Explanation:
+
+1. **Include WiFi Library**:
+   - `#include <WiFi.h>` se hum WiFi library ko include karte hain jo WiFi functionality ko provide karti hai.
+
+2. **Set WiFi Credentials**:
+   - `ssid` aur `password` variables mein apne WiFi network ka name aur password specify karte hain.
+
+3. **Connect to WiFi**:
+   - `WiFi.begin(ssid, password)` se hum WiFi network se connect karne ki koshish karte hain.
+
+4. **Check Connection Status**:
+   - `WiFi.status()` ko use karke connection status check karte hain. Agar WiFi connected nahi hota, toh retry karte hain.
+
+5. **Print IP and MAC Address**:
+   - `WiFi.localIP()` se local IP address aur `WiFi.macAddress()` se MAC address print karte hain.
+
+6. **Disconnect WiFi (optional)**:
+   - Agar WiFi se disconnect karna ho, toh `WiFi.disconnect()` ka use karte hain.
+
+### Summary of Functions:
+
+1. **WiFi.begin(ssid, password)**: WiFi network se connect karta hai.
+2. **WiFi.status()**: WiFi connection ka status return karta hai (connected ya disconnected).
+3. **WiFi.localIP()**: WiFi module ka local IP address return karta hai.
+4. **WiFi.macAddress()**: WiFi module ka MAC address return karta hai.
+5. **WiFi.disconnect()**: WiFi connection ko disconnect karta hai.
+
+In functions ka use aap WiFi connectivity ko manage karne ke liye karte hain, aur aap easily WiFi connection ka status track kar sakte hain.
