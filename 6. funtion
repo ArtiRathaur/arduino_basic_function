@@ -1,0 +1,205 @@
+Yeh functions Arduino me **digital data** ko **shift** ya **pulse detect** karne, **sound generate** karne ke liye use hote hain. Inka use specific tasks jaise data transmission, pulse width measurement, aur sound generation ke liye hota hai.
+
+### 1. **`shiftOut()`**
+#### Kya hai:
+- Data ko **shift register** ke through output pins pe **shift** karta hai, yani ek byte ko sequentially ek pin se doosri pin pe send karta hai.
+#### Kaha use hota hai:
+- Jab hume **parallel data** ko **serially** send karna ho, jaise LEDs ya display ko control karna.
+
+#### Syntax:
+```cpp
+shiftOut(dataPin, clockPin, bitOrder, value);
+```
+- **dataPin**: Pin number jo data ko shift karega.
+- **clockPin**: Pin number jo clock pulse generate karega.
+- **bitOrder**: Bit ka order (`LSB_FIRST` or `MSB_FIRST`).
+- **value**: 8-bit value jo shift karni hai (0-255).
+
+#### Example:
+```cpp
+int dataPin = 2;     // Data pin connected to shift register
+int clockPin = 3;    // Clock pin connected to shift register
+
+void setup() {
+  pinMode(dataPin, OUTPUT);
+  pinMode(clockPin, OUTPUT);
+}
+
+void loop() {
+  shiftOut(dataPin, clockPin, MSB_FIRST, 0b10101010);  // Send binary value 10101010 to shift register
+  delay(1000);  // Wait for 1 second
+}
+```
+- **Output:** `shiftOut()` function pin 2 aur 3 ke through 8-bit value (binary `10101010`) shift karega shift register me.
+
+---
+
+### 2. **`shiftIn()`**
+#### Kya hai:
+- Data ko **shift register** se input pin pe **shift** kar ke read karta hai.
+#### Kaha use hota hai:
+- Jab hume serial data ko parallel form me read karna ho.
+
+#### Syntax:
+```cpp
+shiftIn(dataPin, clockPin, bitOrder);
+```
+- **dataPin**: Pin number jo data receive karega.
+- **clockPin**: Pin number jo clock pulses provide karega.
+- **bitOrder**: Bit ka order (`LSB_FIRST` or `MSB_FIRST`).
+
+#### Example:
+```cpp
+int dataPin = 2;     // Data pin connected to shift register
+int clockPin = 3;    // Clock pin connected to shift register
+
+void setup() {
+  Serial.begin(9600);  // Start serial communication
+  pinMode(dataPin, INPUT);
+  pinMode(clockPin, INPUT);
+}
+
+void loop() {
+  int value = shiftIn(dataPin, clockPin, MSB_FIRST);  // Read 8-bit value from shift register
+  Serial.println(value);  // Print value to Serial Monitor
+  delay(1000);  // Wait for 1 second
+}
+```
+- **Output:** Shift register se data read ho kar **Serial Monitor** pe display hoga.
+
+---
+
+### 3. **`pulseIn()`**
+#### Kya hai:
+- Pin par **high** ya **low** pulse ki **duration** measure karta hai, yani ek pulse ke duration ko microseconds me measure karta hai.
+#### Kaha use hota hai:
+- Jab hume kisi signal ka **pulse width** measure karna ho, jaise ultrasonic sensor se distance measurement.
+
+#### Syntax:
+```cpp
+pulseIn(pin, value);
+```
+- **pin**: Pin number jahan se pulse measure karni hai.
+- **value**: Pulse ka type (`HIGH` ya `LOW`).
+
+#### Example:
+```cpp
+int sensorPin = 7;  // Pin where the pulse is received
+
+void setup() {
+  Serial.begin(9600);  // Start serial communication
+}
+
+void loop() {
+  long duration = pulseIn(sensorPin, HIGH);  // Measure pulse duration when signal is HIGH
+  Serial.print("Duration: ");
+  Serial.println(duration);  // Print pulse duration in microseconds
+  delay(1000);  // Wait for 1 second
+}
+```
+- **Output:** Jab sensor pin pe pulse HIGH hota hai, `pulseIn()` function uski duration ko measure karke **Serial Monitor** pe display karega.
+
+---
+
+### 4. **`tone()`**
+#### Kya hai:
+- Specific pin par **frequency** generate karta hai (beep/sound), jisme **tone** ko play kiya jaata hai.
+#### Kaha use hota hai:
+- Jab hume **sound** generate karna ho, jaise buzzer ya speaker me sound play karna.
+
+#### Syntax:
+```cpp
+tone(pin, frequency);
+```
+- **pin**: Pin number jahan sound play karni hai.
+- **frequency**: Frequency of the tone in Hertz (Hz).
+
+#### Example:
+```cpp
+int buzzerPin = 8;  // Pin connected to the buzzer
+
+void setup() {
+  tone(buzzerPin, 1000);  // Play tone at 1000 Hz
+}
+
+void loop() {
+  // Tone will play continuously until noTone is called
+}
+```
+- **Output:** Pin 8 pe **1000 Hz tone** play hoga jab `tone()` function call hoga.
+
+---
+
+### 5. **`noTone()`**
+#### Kya hai:
+- Jo tone `tone()` function se play ho rahi hoti hai, usse **stop** karne ke liye use hota hai.
+#### Kaha use hota hai:
+- Jab hume sound ko **stop** karna ho.
+
+#### Syntax:
+```cpp
+noTone(pin);
+```
+- **pin**: Pin number jahan tone ko stop karna hai.
+
+#### Example:
+```cpp
+int buzzerPin = 8;  // Pin connected to the buzzer
+
+void setup() {
+  tone(buzzerPin, 1000);  // Play tone at 1000 Hz
+  delay(2000);             // Wait for 2 seconds
+  noTone(buzzerPin);      // Stop the tone after 2 seconds
+}
+
+void loop() {
+  // Tone will play for 2 seconds and then stop
+}
+```
+- **Output:** **Pin 8** pe **1000 Hz tone** 2 seconds ke liye play hoga, phir stop ho jayega jab `noTone()` call hoga.
+
+---
+
+### **Summary Table**
+
+| **Function**      | **Purpose**                                               | **Use Case**                                                   |
+|-------------------|-----------------------------------------------------------|---------------------------------------------------------------|
+| **`shiftOut()`**   | Shift data out to a shift register bit by bit             | Sending serial data to parallel devices (e.g., LEDs, displays) |
+| **`shiftIn()`**    | Shift data in from a shift register bit by bit            | Receiving serial data from parallel devices                   |
+| **`pulseIn()`**    | Measure the duration of a HIGH or LOW pulse in microseconds| Measure pulse width (e.g., sensor signal timing)              |
+| **`tone()`**       | Generate a tone (sound) at a specific frequency           | Generate sound (e.g., buzzer or speaker)                      |
+| **`noTone()`**     | Stop the tone being played on a specific pin              | Stop playing sound                                             |
+
+---
+
+### **Use Case Scenarios:**
+
+1. **Controlling Shift Registers:**
+   - Use `shiftOut()` to control devices like LED matrices or 7-segment displays using a shift register.
+   
+2. **Receiving Serial Data:**
+   - Use `shiftIn()` to receive serial data from shift registers or other devices that transmit data serially.
+   
+3. **Pulse Measurement:**
+   - Use `pulseIn()` to measure pulse width for sensors like ultrasonic sensors or for reading PWM signals.
+
+4. **Generating Sounds:**
+   - Use `tone()` to generate beeps or melodies for sound effects, alarms, or indicators. Use `noTone()` to stop the sound.
+
+### **Step-by-Step Example: Generating a Tone with a Buzzer**
+```cpp
+int buzzerPin = 8;  // Pin connected to the buzzer
+
+void setup() {
+  tone(buzzerPin, 500);  // Play 500 Hz tone on pin 8
+}
+
+void loop() {
+  delay(1000);          // Wait for 1 second
+  tone(buzzerPin, 1000); // Change tone to 1000 Hz
+  delay(1000);          // Wait for 1 second
+}
+```
+- **Output:** Buzzer pe 500 Hz sound play hoga, phir 1000 Hz sound play hoga, har 1 second baad.
+
+Agar koi aur confusion ho toh zarur poochna! 😊
