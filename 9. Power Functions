@@ -1,0 +1,93 @@
+`**sleep_mode()**` aur `**powerDown()**` dono functions **Arduino** me power management ke liye use hote hain. Ye functions microcontroller ke power consumption ko optimize karte hain, especially jab aapko energy-efficient designs banana ho. Inka use tab kiya jata hai jab aapka Arduino idle state mein ho aur aapko power save karna ho.
+
+### 1. **sleep_mode()**
+   - **Purpose**: Ye function Arduino ko low power mode me dalne ke liye use hota hai. Iska use tab kiya jata hai jab aapko device ko idle state me rakhna ho aur unnecessary power consumption ko rokna ho.
+   - **How it works**: `sleep_mode()` call karte hi Arduino microcontroller low power mode me chala jata hai. Jab tak koi external interrupt nahi aata, tab tak ye mode active rehta hai.
+   - **Syntax**:
+     ```cpp
+     sleep_mode();
+     ```
+   - **Usage**: 
+     Aapko `sleep_mode()` ka use tab karna hota hai jab aapko microcontroller ko sleep mode me rakhna ho, aur jab tak koi interrupt nahi hota, tab tak usse power save karwana ho.
+
+   **Example**:
+   ```cpp
+   #include <avr/sleep.h>
+   #include <avr/interrupt.h>
+
+   void setup() {
+     Serial.begin(9600);
+
+     // Interrupt ko enable karna
+     attachInterrupt(digitalPinToInterrupt(2), wakeUp, LOW);  // Pin 2 pe interrupt
+     
+     // Sleep mode setup
+     set_sleep_mode(SLEEP_MODE_PWR_DOWN);  // Power down mode select karte hain
+     sleep_enable();  // Sleep mode enable karte hain
+     Serial.println("Going to sleep...");
+     sleep_mode();    // Microcontroller sleep mode me chala jata hai
+   }
+
+   void loop() {
+     // Main loop empty hai
+   }
+
+   // Interrupt handler function
+   void wakeUp() {
+     sleep_disable();  // Sleep mode disable karte hain
+     Serial.println("Woke up from sleep mode!");
+   }
+   ```
+   - **Explanation**:
+     - `sleep_mode()` ko call karne se Arduino power down mode me chala jata hai.
+     - `attachInterrupt()` ka use ek interrupt set karne ke liye kiya gaya hai. Jab pin 2 par low signal aata hai, to Arduino wake up ho jata hai.
+     - Jab interrupt trigger hota hai, `wakeUp()` function call hota hai jo sleep mode ko disable karta hai.
+
+### 2. **powerDown()**
+   - **Purpose**: Ye function bhi Arduino ko low power state me daalne ke liye use hota hai. Ye `sleep_mode()` ke saath kaafi similar hai, but `powerDown()` mode mein Arduino ka power consumption maximum reduce hota hai.
+   - **How it works**: Jab aap `powerDown()` mode ka use karte ho, to Arduino maximum low power consumption mode me chala jata hai. Ye mode microcontroller ki majority functions ko disable kar deta hai, including ADCs aur timers ko bhi.
+   - **Syntax**:
+     ```cpp
+     powerDown();
+     ```
+   - **Usage**: Jab aapko Arduino ko full low power mode mein dalna ho, to `powerDown()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   #include <avr/sleep.h>
+   #include <avr/interrupt.h>
+
+   void setup() {
+     Serial.begin(9600);
+     
+     // Pin 2 par interrupt set karte hain
+     attachInterrupt(digitalPinToInterrupt(2), wakeUp, FALLING);  // Pin 2 pe interrupt
+
+     // Power down mode set karte hain
+     set_sleep_mode(SLEEP_MODE_PWR_DOWN);
+     sleep_enable();  // Sleep mode enable
+     Serial.println("Going to power down...");
+     powerDown();     // Power down mode enable karte hain
+   }
+
+   void loop() {
+     // Main loop empty hai
+   }
+
+   // Interrupt handler
+   void wakeUp() {
+     sleep_disable();  // Sleep mode disable
+     Serial.println("Woke up from power down!");
+   }
+   ```
+   - **Explanation**:
+     - `powerDown()` function ko call karte hi, Arduino power down mode me chala jata hai.
+     - Jaise hi external interrupt trigger hota hai (pin 2 par falling edge detect hota hai), Arduino wake up ho jata hai aur `wakeUp()` function execute hota hai.
+
+### Summary:
+1. **`sleep_mode()`** aur **`powerDown()`** dono ka use power saving ke liye hota hai, lekin `powerDown()` zyada efficient hota hai kyunki ye zyada components ko disable kar deta hai.
+2. **`sleep_mode()`**: General low power mode mein Arduino ko daalta hai.
+3. **`powerDown()`**: Maximum power saving mode mein Arduino ko daalta hai.
+4. **Interrupts ka use**: Aapko interrupt set karna padta hai taaki jab Arduino power saving mode mein ho, tab koi external event wake-up trigger kare.
+
+Ye functions especially battery-powered projects mein useful hote hain jaha aapko energy consumption ko minimize karna ho.
