@@ -1,0 +1,171 @@
+`Wire` library ka use **I2C (Inter-Integrated Circuit)** communication protocol ke through microcontroller boards (like Arduino) ko dusre devices, sensors, ya peripherals se connect karne ke liye hota hai. Ye protocol communication ke liye 2 wires ka use karta hai: SDA (Data Line) aur SCL (Clock Line). `Wire` library in communication functions ko handle karti hai.
+
+### 1. **Wire.begin()**
+   - **Purpose**: Ye function I2C communication ko initialize karta hai.
+   - **Syntax**:
+     ```cpp
+     Wire.begin();
+     ```
+     Agar aap Arduino ko master device bana rahe ho, toh sirf `Wire.begin()` likhna enough hota hai. Agar aapko Arduino ko slave device banana hai, toh aapko slave address bhi pass karna padta hai.
+     ```cpp
+     Wire.begin(slaveAddress);
+     ```
+   - **Usage**: `Wire.begin()` ko aap setup() function me call karte ho taaki I2C bus initialize ho jaye.
+
+   **Example**:
+   ```cpp
+   void setup() {
+     Wire.begin();  // I2C communication ko initialize karta hai
+     Serial.begin(9600);
+   }
+   void loop() {
+     // I2C communication ko setup ke baad aap next step perform kar sakte ho
+   }
+   ```
+
+### 2. **Wire.requestFrom()**
+   - **Purpose**: Ye function master device ko slave device se data request karne ke liye use hota hai.
+   - **Syntax**:
+     ```cpp
+     Wire.requestFrom(address, quantity);
+     ```
+   - **Parameters**:
+     - `address`: Slave device ka address.
+     - `quantity`: Kitne bytes data aapko read karne hain.
+   - **Usage**: Jab aap slave device se data read karna chahte hain, toh `Wire.requestFrom()` ko call karte hain.
+
+   **Example**:
+   ```cpp
+   void setup() {
+     Wire.begin();
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.requestFrom(8, 2);  // Slave address 8 se 2 bytes data request karna
+     while (Wire.available()) {
+       char c = Wire.read();  // Data read karna
+       Serial.print(c);       // Read data ko print karna
+     }
+     delay(1000);  // 1 second delay
+   }
+   ```
+
+### 3. **Wire.write()**
+   - **Purpose**: Ye function I2C bus pe data send karne ke liye use hota hai.
+   - **Syntax**:
+     ```cpp
+     Wire.write(data);
+     ```
+   - **Parameters**:
+     - `data`: Jo data aap send karna chahte ho (byte format me).
+   - **Usage**: Jab master device slave device ko data bhejna chahta hai, toh `Wire.write()` use karte hain.
+
+   **Example**:
+   ```cpp
+   void setup() {
+     Wire.begin();
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.beginTransmission(8);  // Slave device address
+     Wire.write("Hello");        // "Hello" data ko send karna
+     Wire.endTransmission();     // Data transmission end karna
+     delay(1000);                // 1 second delay
+   }
+   ```
+
+### 4. **Wire.read()**
+   - **Purpose**: Ye function I2C bus se data read karne ke liye use hota hai.
+   - **Syntax**:
+     ```cpp
+     Wire.read();
+     ```
+   - **Return Type**: Ye byte data ko return karta hai jo I2C bus se read kiya gaya ho.
+   - **Usage**: Jab master device slave device se data read karta hai, toh `Wire.read()` ka use hota hai.
+
+   **Example**:
+   ```cpp
+   void setup() {
+     Wire.begin();
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.requestFrom(8, 1);  // Slave device address 8 se 1 byte data request karna
+     if (Wire.available()) {
+       char c = Wire.read();  // Data read karna
+       Serial.print(c);       // Read data ko print karna
+     }
+     delay(1000);  // 1 second delay
+   }
+   ```
+
+### 5. **Wire.endTransmission()**
+   - **Purpose**: Ye function data transmission ko end karta hai.
+   - **Syntax**:
+     ```cpp
+     Wire.endTransmission();
+     ```
+   - **Usage**: Jab aap master device se slave device ko data send kar lete ho, toh `Wire.endTransmission()` call karte hain jisse communication close ho jata hai.
+
+   **Example**:
+   ```cpp
+   void setup() {
+     Wire.begin();
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.beginTransmission(8);  // Slave device address
+     Wire.write("Hello");        // Data write karna
+     Wire.endTransmission();     // Transmission end karna
+     delay(1000);                // 1 second delay
+   }
+   ```
+
+### Full Example (Master-Slave Communication)
+   - **Master Code** (I2C Data Send Karna):
+   ```cpp
+   #include <Wire.h>
+
+   void setup() {
+     Wire.begin();  // I2C bus initialize karna
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.beginTransmission(8);  // Slave device address 8
+     Wire.write("Hello");        // Data send karna
+     Wire.endTransmission();     // Transmission end karna
+     delay(1000);                // 1 second delay
+   }
+   ```
+   - **Slave Code** (Data Receive Karna):
+   ```cpp
+   #include <Wire.h>
+
+   void setup() {
+     Wire.begin(8);    // Slave address 8 se begin karna
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     Wire.requestFrom(8, 6);  // Master se 6 bytes data request karna
+     while (Wire.available()) {
+       char c = Wire.read();  // Data read karna
+       Serial.print(c);       // Data ko print karna
+     }
+     delay(1000);
+   }
+   ```
+
+### Summary:
+- **Wire.begin()**: I2C communication ko initialize karta hai (Master ya Slave mode me).
+- **Wire.requestFrom()**: Slave se data read karne ke liye use hota hai.
+- **Wire.write()**: Data send karne ke liye use hota hai.
+- **Wire.read()**: Data read karne ke liye use hota hai.
+- **Wire.endTransmission()**: Transmission ko end karta hai.
+
+In functions ka use master-slave devices ke beech data exchange karte waqt hota hai. Aap sensors, displays, ya any I2C compatible devices ke saath I2C communication setup karne ke liye in functions ka use kar sakte hain.
