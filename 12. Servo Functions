@@ -1,0 +1,181 @@
+`Servo` library ka use Arduino boards me servo motors ko control karne ke liye hota hai. Servo motors ek type ke DC motors hote hain jo ek specific angle tak rotate karte hain, aur inhe precise positioning ke liye use kiya jata hai. `Servo` library ke through aap servo motor ki rotation angle ko control kar sakte hain.
+
+### 1. **Servo.attach()**
+   - **Purpose**: Ye function servo motor ko ek specific pin se attach karta hai, taaki aap us pin ke through servo motor ko control kar sakein.
+   - **Syntax**:
+     ```cpp
+     servo.attach(pin);
+     ```
+     - **Parameters**: 
+       - `pin`: Ye Arduino board ki pin number hai, jahan servo motor ko connect kiya gaya hai.
+     - Agar aap servo motor ki range ko customize karna chahte hain (default range 0-180 degrees hoti hai), toh aap range ko bhi specify kar sakte hain:
+       ```cpp
+       servo.attach(pin, min, max);
+       ```
+       - `min` aur `max`: Servo motor ka minimum aur maximum angle range.
+   - **Usage**: Ye function servo motor ko specific pin se connect karta hai, taaki aap us pin ke through servo motor ko control kar sakein.
+
+   **Example**:
+   ```cpp
+   #include <Servo.h>
+   
+   Servo myServo;  // Servo object create karte hain
+   
+   void setup() {
+     myServo.attach(9);  // Pin 9 pe servo motor attach karte hain
+   }
+
+   void loop() {
+     // Servo motor ko angle ke saath control karenge
+   }
+   ```
+
+### 2. **Servo.write()**
+   - **Purpose**: Ye function servo motor ko ek specific angle pe rotate karta hai.
+   - **Syntax**:
+     ```cpp
+     servo.write(angle);
+     ```
+     - **Parameters**:
+       - `angle`: Servo motor ka desired angle (0 to 180 degrees ke beech).
+   - **Usage**: Ye function servo motor ko specified angle tak move karne ka command deta hai.
+
+   **Example**:
+   ```cpp
+   #include <Servo.h>
+   
+   Servo myServo;
+   
+   void setup() {
+     myServo.attach(9);  // Pin 9 pe servo attach karte hain
+   }
+
+   void loop() {
+     myServo.write(90);  // Servo motor ko 90 degree pe set karte hain
+     delay(1000);        // 1 second wait karte hain
+     myServo.write(0);   // Servo motor ko 0 degree pe set karte hain
+     delay(1000);        // 1 second wait karte hain
+   }
+   ```
+
+### 3. **Servo.read()**
+   - **Purpose**: Ye function servo motor ke current angle ko return karta hai.
+   - **Syntax**:
+     ```cpp
+     int currentAngle = servo.read();
+     ```
+   - **Return Type**: Ye current angle ko return karta hai (0 to 180 degrees ke beech).
+   - **Usage**: Ye function aapko servo motor ke current angle ko read karne ke liye use hota hai.
+
+   **Example**:
+   ```cpp
+   #include <Servo.h>
+   
+   Servo myServo;
+   
+   void setup() {
+     myServo.attach(9);  // Pin 9 pe servo attach karte hain
+     Serial.begin(9600);
+   }
+
+   void loop() {
+     int currentAngle = myServo.read();  // Current angle ko read karte hain
+     Serial.print("Current Angle: ");
+     Serial.println(currentAngle);  // Angle ko serial monitor pe print karte hain
+     delay(1000);  // 1 second delay
+   }
+   ```
+
+### 4. **Servo.writeMicroseconds()**
+   - **Purpose**: Ye function servo motor ko precise position par set karta hai, microseconds me pulse width dekar.
+   - **Syntax**:
+     ```cpp
+     servo.writeMicroseconds(pulseWidth);
+     ```
+     - **Parameters**: 
+       - `pulseWidth`: Servo motor ke liye pulse width (1000 to 2000 microseconds). Ye aapko exact position ko set karne ke liye use hota hai.
+   - **Usage**: Jab aapko servo motor ki movement ko precise microsecond pulses ke through control karna ho, tab aap `writeMicroseconds()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   #include <Servo.h>
+   
+   Servo myServo;
+   
+   void setup() {
+     myServo.attach(9);  // Pin 9 pe servo attach karte hain
+   }
+
+   void loop() {
+     myServo.writeMicroseconds(1500);  // Servo motor ko 1500 microseconds pulse dena
+     delay(1000);                      // 1 second delay
+   }
+   ```
+
+### 5. **Servo.detach()**
+   - **Purpose**: Ye function servo motor ko specified pin se detach kar deta hai, aur servo motor ko control karna band kar deta hai.
+   - **Syntax**:
+     ```cpp
+     servo.detach();
+     ```
+   - **Usage**: Jab aap servo motor ko pin se disconnect karna chahte hain ya agar servo motor ko power save mode me bhejna ho, toh aap `detach()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   #include <Servo.h>
+   
+   Servo myServo;
+   
+   void setup() {
+     myServo.attach(9);  // Pin 9 pe servo attach karte hain
+   }
+
+   void loop() {
+     myServo.write(90);  // Servo motor ko 90 degree pe set karte hain
+     delay(1000);        // 1 second delay
+     myServo.detach();   // Servo motor ko detach kar dete hain
+     delay(1000);        // 1 second delay
+   }
+   ```
+
+### Full Example (Servo Control)
+
+```cpp
+#include <Servo.h>
+
+Servo myServo;  // Servo object create karte hain
+
+void setup() {
+  myServo.attach(9);  // Pin 9 pe servo motor ko attach karte hain
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Servo motor ko 0 degree pe set karte hain
+  myServo.write(0);
+  delay(1000);  // 1 second delay
+
+  // Servo motor ko 90 degree pe set karte hain
+  myServo.write(90);
+  delay(1000);  // 1 second delay
+
+  // Servo motor ko 180 degree pe set karte hain
+  myServo.write(180);
+  delay(1000);  // 1 second delay
+
+  // Servo motor ka current angle read karte hain
+  int currentAngle = myServo.read();
+  Serial.print("Current Angle: ");
+  Serial.println(currentAngle);
+  delay(1000);  // 1 second delay
+}
+```
+
+### Summary:
+- **Servo.attach()**: Servo motor ko ek pin se connect karta hai.
+- **Servo.write()**: Servo motor ko specified angle pe set karta hai (0-180 degrees).
+- **Servo.read()**: Servo motor ke current angle ko return karta hai.
+- **Servo.writeMicroseconds()**: Servo motor ko precise position par set karta hai using microseconds.
+- **Servo.detach()**: Servo motor ko pin se detach kar deta hai aur control ko band kar deta hai.
+
+In functions ka use servo motor ko control karne ke liye hota hai, jaise robotic arms, camera mounts, etc., jahan precise angular movement ki zarurat hoti hai.
