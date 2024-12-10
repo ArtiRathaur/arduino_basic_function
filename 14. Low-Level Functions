@@ -1,0 +1,145 @@
+Arduino mein `sei()`, `cli()`, `interrupts()`, `noInterrupts()`, `attachInterrupt()`, aur `detachInterrupt()` functions ka use interrupts ko control karne ke liye hota hai. Interrupts allow karte hain microcontroller ko kisi specific event ya condition pe interrupt ho kar kaam karne ka. Ye useful hote hain jab aapko kisi external event (jaise button press, sensor input, etc.) ke response mein turant kuch action lena ho, bina main program flow ko interrupt kiye.
+
+Aaiye, in functions ko ek-ek karke samjhte hain:
+
+### 1. **sei()**
+   - **Purpose**: Ye function global interrupt flag ko set karta hai, jisse interrupts ko enable kar diya jata hai. Jab interrupts enable hota hai, tab microcontroller kisi bhi interrupt event ko handle karne ke liye interrupt service routine (ISR) ko call kar sakta hai.
+   - **Syntax**:
+     ```cpp
+     sei();
+     ```
+   - **Usage**: Agar aapne interrupts ko disable kiya hai aur ab aap chahte hain ki interrupts wapas enable ho jaye, toh aap `sei()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   sei();  // Global interrupts ko enable karte hain
+   ```
+
+### 2. **cli()**
+   - **Purpose**: Ye function global interrupt flag ko clear karta hai, jisse interrupts disable ho jate hain. Jab interrupts disabled hote hain, microcontroller koi bhi interrupt service routine (ISR) ko trigger nahi karega.
+   - **Syntax**:
+     ```cpp
+     cli();
+     ```
+   - **Usage**: Agar aap chahte hain ki aapke program ko interrupt se disturb na kiya jaye, toh aap `cli()` ka use karke interrupts ko disable kar sakte hain.
+
+   **Example**:
+   ```cpp
+   cli();  // Global interrupts ko disable karte hain
+   ```
+
+### 3. **interrupts()**
+   - **Purpose**: Ye function bhi interrupts ko enable karta hai. Agar aapne `cli()` ke baad interrupts ko disable kiya hai, toh `interrupts()` function se aap unhe dobara enable kar sakte hain.
+   - **Syntax**:
+     ```cpp
+     interrupts();
+     ```
+   - **Usage**: Jab aapko program ko resume karna ho aur interrupts ko enable karna ho, tab aap `interrupts()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   interrupts();  // Interrupts ko enable karte hain
+   ```
+
+### 4. **noInterrupts()**
+   - **Purpose**: Ye function interrupts ko disable karne ke liye use hota hai, taki program kisi bhi external interrupt ko ignore kar sake.
+   - **Syntax**:
+     ```cpp
+     noInterrupts();
+     ```
+   - **Usage**: Jab aap kisi critical section mein ho aur aap nahi chahte ki interrupts beech mein aayein, tab aap `noInterrupts()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   noInterrupts();  // Interrupts ko disable karte hain
+   ```
+
+### 5. **attachInterrupt()**
+   - **Purpose**: Ye function kisi pin pe interrupt ko attach karta hai. Jab wo pin specific condition (high, low, change, rising, falling) ko meet karta hai, to specified interrupt service routine (ISR) call hota hai.
+   - **Syntax**:
+     ```cpp
+     attachInterrupt(digitalPinToInterrupt(pin), ISR, mode);
+     ```
+     - `pin`: Ye wo pin hai jahan aap interrupt ko attach karna chahte hain.
+     - `ISR`: Ye wo interrupt service routine function hai jo trigger hoga jab interrupt occur karega.
+     - `mode`: Ye interrupt ka trigger condition hai. Possible values:
+       - `LOW`: Pin low hone par interrupt trigger hoga.
+       - `CHANGE`: Pin ka state change hone par interrupt trigger hoga.
+       - `RISING`: Pin rising edge par (low to high) interrupt trigger hoga.
+       - `FALLING`: Pin falling edge par (high to low) interrupt trigger hoga.
+
+   **Example**:
+   ```cpp
+   attachInterrupt(digitalPinToInterrupt(2), myISR, RISING);  // Pin 2 par rising edge par interrupt trigger hoga
+   ```
+
+### 6. **detachInterrupt()**
+   - **Purpose**: Ye function interrupt ko detach karta hai, yani interrupt service routine (ISR) ko pin se remove kar deta hai.
+   - **Syntax**:
+     ```cpp
+     detachInterrupt(pin);
+     ```
+     - `pin`: Ye wo pin hai jahan se aap interrupt ko detach karna chahte hain.
+   - **Usage**: Jab aap interrupt ko disable karna chahte hain, tab aap `detachInterrupt()` ka use karte hain.
+
+   **Example**:
+   ```cpp
+   detachInterrupt(digitalPinToInterrupt(2));  // Pin 2 se interrupt ko detach karte hain
+   ```
+
+### Full Example: Button Press Interrupt with `attachInterrupt()`
+
+Is example mein, hum ek button press ke liye interrupt set karenge. Jab button press hoga, ek LED blink karegi.
+
+```cpp
+int ledPin = LED_BUILTIN;  // LED pin
+int buttonPin = 2;         // Button pin
+volatile bool ledState = false;  // LED state ko track karne ke liye variable
+
+void setup() {
+  pinMode(ledPin, OUTPUT);      // LED pin ko output mode mein set karte hain
+  pinMode(buttonPin, INPUT);    // Button pin ko input mode mein set karte hain
+
+  // Button press par interrupt setup karte hain
+  attachInterrupt(digitalPinToInterrupt(buttonPin), toggleLED, FALLING);  // FALLING edge par interrupt trigger hoga
+
+  sei();  // Interrupts ko enable karte hain
+}
+
+void loop() {
+  // Main loop mein koi kaam nahi hoga, LED blink hona button press par depend karega
+}
+
+// Interrupt service routine (ISR) function
+void toggleLED() {
+  ledState = !ledState;       // LED state ko toggle karte hain
+  digitalWrite(ledPin, ledState);  // LED ko update karte hain
+}
+```
+
+### Step-by-Step Explanation:
+1. **Pin Setup**: 
+   - `pinMode(ledPin, OUTPUT);` se hum LED pin ko output mode mein set karte hain.
+   - `pinMode(buttonPin, INPUT);` se hum button pin ko input mode mein set karte hain.
+
+2. **Attach Interrupt**: 
+   - `attachInterrupt(digitalPinToInterrupt(buttonPin), toggleLED, FALLING);` se hum button pin (Pin 2) ko `FALLING` edge par interrupt ke liye set karte hain. Jab button press hoga (Falling edge), `toggleLED()` ISR call hoga.
+
+3. **ISR (Interrupt Service Routine)**: 
+   - `toggleLED()` function mein hum LED ki state ko toggle karte hain (ON/OFF).
+
+4. **Enable Interrupts**: 
+   - `sei();` se hum global interrupts ko enable karte hain.
+
+5. **Main Loop**: 
+   - Main `loop()` function mein koi kaam nahi hota, sab kuch button press par interrupt ke through handle hota hai.
+
+### Summary:
+- **sei()**: Interrupts ko enable karta hai.
+- **cli()**: Interrupts ko disable karta hai.
+- **interrupts()**: Interrupts ko enable karta hai (CLI ke baad).
+- **noInterrupts()**: Interrupts ko disable karta hai.
+- **attachInterrupt()**: Ek pin ko interrupt ke saath attach karta hai.
+- **detachInterrupt()**: Ek pin se interrupt ko detach karta hai.
+
+In functions ka use aap tab karte hain jab aapko microcontroller ko kisi specific event (jaise button press, sensor input, etc.) par response dena ho bina main program ko interrupt kiye.
