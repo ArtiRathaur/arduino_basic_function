@@ -1,0 +1,345 @@
+Yeh sab Arduino aur C/C++ programming me **mathematical aur logical operations** ke liye use hote hain. Inka **meaning**, **use**, **syntax**, aur **example** step-by-step samajhte hain.
+
+---
+
+### 1. **`map()`**  
+#### Kya hai:
+- **Value remapping** karta hai ek range se doosri range me.
+#### Kaha use hota hai:
+- Jab analog ya sensor input ko kisi alag range me convert karna ho, jaise sensor value (0-1023) ko LED brightness (0-255) me badalna.
+
+#### Syntax:
+```cpp
+map(value, fromLow, fromHigh, toLow, toHigh);
+```
+
+#### Example:
+```cpp
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int sensorValue = analogRead(A0);          // Read sensor value (0-1023)
+  int brightness = map(sensorValue, 0, 1023, 0, 255);  // Remap to 0-255
+  analogWrite(9, brightness);               // Set LED brightness
+  Serial.println(brightness);               // Print mapped value
+  delay(100);
+}
+```
+
+---
+
+### 2. **`constrain()`**  
+#### Kya hai:
+- Kisi value ko ek **fixed range** me limit karta hai.
+#### Kaha use hota hai:
+- Jab hume kisi value ko **out of range hone se rokna ho**.
+
+#### Syntax:
+```cpp
+constrain(value, min, max);
+```
+
+#### Example:
+```cpp
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int speed = 300;                           // Value outside range
+  speed = constrain(speed, 0, 255);          // Limit to 0-255
+  Serial.println(speed);                     // Output: 255
+  delay(100);
+}
+```
+
+---
+
+### 3. **`random()`**  
+#### Kya hai:
+- Random number generate karta hai ek defined range me.
+#### Kaha use hota hai:
+- Jab random behaviors ya numbers chahiye ho, jaise random LED blink.
+
+#### Syntax:
+```cpp
+random(min, max);
+```
+
+#### Example:
+```cpp
+void setup() {
+  Serial.begin(9600);
+}
+
+void loop() {
+  int randNum = random(1, 10);               // Generate random number (1-9)
+  Serial.println(randNum);
+  delay(500);
+}
+```
+
+---
+
+### 4. **`randomSeed()`**  
+#### Kya hai:
+- Random number generator ke liye **seed** set karta hai, jo randomness ko improve karta hai.
+#### Kaha use hota hai:
+- Jab truly random sequence chahiye.
+
+#### Example:
+```cpp
+void setup() {
+  randomSeed(analogRead(0));                 // Use analog pin as seed
+  Serial.begin(9600);
+}
+
+void loop() {
+  int randNum = random(1, 10);               // Random number
+  Serial.println(randNum);
+  delay(500);
+}
+```
+
+---
+
+### 5. **`abs()`**  
+#### Kya hai:
+- Kisi value ka **absolute (positive)** value return karta hai.
+#### Kaha use hota hai:
+- Negative values ko positive karne ke liye, jaise distance calculation me.
+
+#### Syntax:
+```cpp
+abs(x);
+```
+
+#### Example:
+```cpp
+void setup() {
+  int value = -50;
+  int absValue = abs(value);                 // absValue = 50
+  Serial.begin(9600);
+  Serial.println(absValue);
+}
+
+void loop() {}
+```
+
+---
+
+### 6. **`pow()`**  
+#### Kya hai:
+- Kisi number ka power calculate karta hai.
+#### Kaha use hota hai:
+- Exponential calculations me, jaise voltage ka power calculation.
+
+#### Syntax:
+```cpp
+pow(base, exponent);
+```
+
+#### Example:
+```cpp
+void setup() {
+  float result = pow(2, 3);                  // 2^3 = 8
+  Serial.begin(9600);
+  Serial.println(result);
+}
+
+void loop() {}
+```
+
+---
+
+### 7. **`sqrt()`**  
+#### Kya hai:
+- Kisi value ka **square root** calculate karta hai.
+#### Kaha use hota hai:
+- Jab geometry ya sensors me distance nikalna ho.
+
+#### Syntax:
+```cpp
+sqrt(x);
+```
+
+#### Example:
+```cpp
+void setup() {
+  float root = sqrt(16);                     // root = 4
+  Serial.begin(9600);
+  Serial.println(root);
+}
+
+void loop() {}
+```
+
+---
+
+### 8. **`sin()`, `cos()`, `tan()`**  
+#### Kya hai:
+- Trigonometric calculations ke liye (angles in radians).
+#### Kaha use hota hai:
+- Jab kisi rotational angle ya wave calculation karni ho.
+
+#### Syntax:
+```cpp
+sin(angle), cos(angle), tan(angle);
+```
+
+#### Example:
+```cpp
+void setup() {
+  float sineValue = sin(PI / 2);             // sin(90°) = 1
+  float cosineValue = cos(0);               // cos(0°) = 1
+  float tanValue = tan(PI / 4);             // tan(45°) = 1
+  Serial.begin(9600);
+  Serial.println(sineValue);
+  Serial.println(cosineValue);
+  Serial.println(tanValue);
+}
+
+void loop() {}
+```
+
+---
+
+### 9. **`min()` & `max()`**  
+#### Kya hai:
+- Minimum ya maximum value return karta hai.
+#### Kaha use hota hai:
+- Value compare karne ke liye, jaise smallest ya largest value find karna.
+
+#### Syntax:
+```cpp
+min(x, y), max(x, y);
+```
+
+#### Example:
+```cpp
+void setup() {
+  int minimum = min(10, 20);                 // 10
+  int maximum = max(10, 20);                 // 20
+  Serial.begin(9600);
+  Serial.println(minimum);
+  Serial.println(maximum);
+}
+
+void loop() {}
+```
+
+---
+
+### 10. **`long`**  
+#### Kya hai:
+- **Large integers** ko store karta hai.
+#### Kaha use hota hai:
+- Jab bade numbers handle karne ho.
+
+#### Example:
+```cpp
+void setup() {
+  long bigNumber = 123456789;
+  Serial.begin(9600);
+  Serial.println(bigNumber);
+}
+
+void loop() {}
+```
+
+---
+
+### 11. **`round()`**  
+#### Kya hai:
+- Float value ko nearest integer par round karta hai.
+#### Kaha use hota hai:
+- Jab rounding ki zarurat ho.
+
+#### Example:
+```cpp
+void setup() {
+  float num = 4.7;
+  int rounded = round(num);                 // 5
+  Serial.begin(9600);
+  Serial.println(rounded);
+}
+
+void loop() {}
+```
+
+---
+
+### 12. **`floor()`**  
+#### Kya hai:
+- Float value ko **lower integer** me convert karta hai.
+#### Kaha use hota hai:
+- Jab value ke fractional part ko hata kar lower value chahiye.
+
+#### Example:
+```cpp
+void setup() {
+  float num = 4.7;
+  int floored = floor(num);                 // 4
+  Serial.begin(9600);
+  Serial.println(floored);
+}
+
+void loop() {}
+```
+
+---
+
+### 13. **`ceil()`**  
+#### Kya hai:
+- Float value ko **upper integer** me convert karta hai.
+#### Kaha use hota hai:
+- Jab value ke fractional part ko hata kar upper value chahiye.
+
+#### Example:
+```cpp
+void setup() {
+  float num = 4.2;
+  int ceiled = ceil(num);                   // 5
+  Serial.begin(9600);
+  Serial.println(ceiled);
+}
+
+void loop() {}
+```
+
+---
+
+### 14. **`mod()`**  
+#### Kya hai:
+- Division ke baad **remainder** return karta hai.
+#### Kaha use hota hai:
+- Jab kisi value ka remainder nikalna ho, jaise number divisible hai ya nahi.
+
+#### Example:
+```cpp
+void setup() {
+  int result = 10 % 3;                      // 10 divided by 3, remainder = 1
+  Serial.begin(9600);
+  Serial.println(result);
+}
+
+void loop() {}
+```
+
+---
+
+### **Summary Table**
+
+| **Function**       | **Use Case**                                | **Example Output**            |
+|------------------- |---------------------------------------------|-------------------------------|
+| **`map()`**        | Remap value from one range to another       | Map 0-1023 to 0-255           |
+| **`constrain()`**  | Limit value in a specific range             | Limit speed between 0-255     |
+| **`random()`**     | Generate random number                      | Random 1-9                    |
+| **`randomSeed()`** | Initialize random sequence                  | Randomness better             |
+| **`abs()`**        | Absolute value                              | -50 to 50                     |
+| **`pow()`**        | Exponential power                           | 2^3 = 8                       |
+| **`sqrt()`**       | Square root                                 | √16 = 4                       |
+| **`sin()`**        | Sine of angle                               | sin(90°) = 1                  |
+| **`min()`**        | Minimum value                               | min(10, 20) = 
