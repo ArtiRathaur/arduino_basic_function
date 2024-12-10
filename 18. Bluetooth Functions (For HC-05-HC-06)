@@ -1,0 +1,133 @@
+`Bluetooth` functions aapko Bluetooth devices ke saath communication establish karne ke liye use hote hain, jaise Arduino board se Bluetooth modules (HC-05, HC-06, etc.) ke saath communication. In functions ko aap data send aur receive karne, aur Bluetooth communication ko manage karne ke liye use karte hain.
+
+Aaiye in functions ko detail mein samajhte hain:
+
+### 1. **Bluetooth.begin()**
+   - **Purpose**: Ye function Bluetooth module ko initialize karta hai aur communication ko start karta hai.
+   - **Syntax**:
+     ```cpp
+     Bluetooth.begin(baud_rate);
+     ```
+     - `baud_rate`: Ye value aapko specify karni hoti hai, jo communication speed hoti hai (common baud rates like 9600, 115200 etc.)
+   - **Usage**: Jab aap Bluetooth module ko initialize karte hain aur communication ko start karte hain, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Bluetooth.begin(9600);  // Bluetooth module ko 9600 baud rate pe start karte hain
+   ```
+
+### 2. **Bluetooth.available()**
+   - **Purpose**: Ye function check karta hai ki Bluetooth module ke paas koi data available hai ya nahi. Agar data available hai, toh ye true return karta hai.
+   - **Syntax**:
+     ```cpp
+     int data = Bluetooth.available();
+     ```
+     - `data`: Agar koi data available hai, toh isse positive value milti hai (usually number of bytes available).
+   - **Usage**: Jab aapko check karna ho ki Bluetooth module ke paas data available hai ya nahi, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   if (Bluetooth.available()) {
+     // Data available hai, process karte hain
+     char incomingData = Bluetooth.read();  // Data ko read karte hain
+   }
+   ```
+
+### 3. **Bluetooth.print()**
+   - **Purpose**: Ye function Bluetooth module ko data bhejne ke liye use hota hai. Ye data ko send karta hai bina newline ke.
+   - **Syntax**:
+     ```cpp
+     Bluetooth.print(data);
+     ```
+     - `data`: Jo data aap send karna chahte hain, wo yahan pass karte hain. Ye ek string ya number ho sakta hai.
+   - **Usage**: Jab aapko Bluetooth device ko kisi data ko send karna ho, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Bluetooth.print("Hello from Arduino!");  // Bluetooth device ko message bhejte hain
+   ```
+
+### 4. **Bluetooth.println()**
+   - **Purpose**: Ye function Bluetooth module ko data bhejne ke liye use hota hai. Isme newline character (`\n`) automatically add hota hai.
+   - **Syntax**:
+     ```cpp
+     Bluetooth.println(data);
+     ```
+     - `data`: Jo data aap send karna chahte hain, wo yahan pass karte hain. Ye bhi ek string ya number ho sakta hai.
+   - **Usage**: Jab aapko Bluetooth device ko kisi data ko send karna ho aur uske baad newline chahiye, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   Bluetooth.println("Hello from Arduino!");  // Bluetooth device ko message bhejte hain with newline
+   ```
+
+### 5. **Bluetooth.read()**
+   - **Purpose**: Ye function Bluetooth module se data read karta hai. Agar data available ho, toh ye data return karta hai.
+   - **Syntax**:
+     ```cpp
+     char data = Bluetooth.read();
+     ```
+     - `data`: Ye value wo data hoti hai jo Bluetooth module se receive hoti hai. Ye ek byte hoti hai.
+   - **Usage**: Jab aapko Bluetooth module se incoming data read karna ho, tab is function ka use karte hain.
+
+   **Example**:
+   ```cpp
+   char incomingData = Bluetooth.read();  // Bluetooth se ek byte read karte hain
+   ```
+
+---
+
+### Full Example: Sending and Receiving Data via Bluetooth
+
+Is example mein hum Arduino ke Bluetooth module ke through ek message send karenge aur uska response receive karenge.
+
+```cpp
+#include <SoftwareSerial.h>
+
+SoftwareSerial Bluetooth(10, 11);  // Bluetooth module ko serial pins 10 aur 11 se connect karenge (RX, TX)
+
+void setup() {
+  Serial.begin(9600);   // Serial monitor ke liye baud rate
+  Bluetooth.begin(9600);  // Bluetooth module ko initialize karte hain
+
+  Serial.println("Bluetooth communication start ho gaya hai");
+}
+
+void loop() {
+  // Bluetooth module se incoming data check karte hain
+  if (Bluetooth.available()) {
+    char incomingData = Bluetooth.read();  // Data read karte hain
+    Serial.print("Received: ");
+    Serial.println(incomingData);  // Serial monitor pe received data print karte hain
+  }
+
+  // Serial monitor se data send karte hain Bluetooth module ko
+  if (Serial.available()) {
+    char outgoingData = Serial.read();  // Serial monitor se data read karte hain
+    Bluetooth.print(outgoingData);  // Bluetooth module ko send karte hain
+    Serial.print("Sent: ");
+    Serial.println(outgoingData);  // Serial monitor pe sent data print karte hain
+  }
+}
+```
+
+### Step-by-Step Explanation:
+
+1. **Include Library and Define Bluetooth Pins**:
+   - `#include <SoftwareSerial.h>` se hum SoftwareSerial library ko include karte hain, jo humare Bluetooth module ke liye RX aur TX pins ko manage karti hai.
+   - `SoftwareSerial Bluetooth(10, 11);` se hum Bluetooth module ke RX aur TX pins ko define karte hain (pins 10 aur 11).
+
+2. **Setup Bluetooth Communication**:
+   - `Bluetooth.begin(9600);` se hum Bluetooth module ko initialize karte hain, aur baud rate 9600 set karte hain.
+
+3. **Check for Incoming Data**:
+   - `Bluetooth.available()` se hum check karte hain ki Bluetooth module ke paas incoming data hai ya nahi.
+   - Agar data available hai, toh `Bluetooth.read()` se data ko read karte hain aur usse serial monitor pe print karte hain.
+
+4. **Send Data from Serial Monitor to Bluetooth**:
+   - Agar serial monitor se koi input hota hai (`Serial.available()`), toh us input ko `Serial.read()` se read karte hain aur `Bluetooth.print()` se Bluetooth module ko send karte hain.
+
+### Summary of Functions:
+
+1. **Bluetooth.begin(baud_rate)**: Bluetooth module ko initialize karta hai aur baud rate set karta hai.
+2. **Bluetooth.available()**
