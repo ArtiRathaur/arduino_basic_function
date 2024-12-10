@@ -1,1 +1,166 @@
 
+Yeh functions **Arduino Interrupts** se related hote hain. Interrupts ka use hota hai jab hum chahte hain ki Arduino ek specific event ke hone par instantly action le, bina program ko wait kiye. Interrupts ke through hum kisi bhi pin pe **events ko detect** kar sakte hain aur jab wo event trigger ho, Arduino uske response me **special code** execute karega.
+
+### 1. **`attachInterrupt()`**
+#### Kya hai:
+- Ek interrupt ko **specific pin** pe attach karta hai, jise ek specific event (jaise rising edge, falling edge, or change) ke hone par trigger kiya jata hai.
+#### Kaha use hota hai:
+- Jab humko kisi specific pin pe event hone par immediate response chahiye, bina loop ke andar check kiye.
+
+#### Syntax:
+```cpp
+attachInterrupt(digitalPinToInterrupt(pin), function, mode);
+```
+- **pin**: Interrupt pin number (Arduino me kuch pins hi interrupt ke liye enabled hote hain).
+- **function**: Wo function jo interrupt hone par call hoga.
+- **mode**: Interrupt ka mode (options: `RISING`, `FALLING`, `CHANGE`, or `LOW`).
+
+#### Example:
+```cpp
+int counter = 0;
+
+void setup() {
+  Serial.begin(9600);            // Start serial communication
+  pinMode(2, INPUT);             // Set pin 2 as input
+  attachInterrupt(digitalPinToInterrupt(2), countInterrupt, RISING);  // Attach interrupt on pin 2
+}
+
+void loop() {
+  Serial.println(counter);       // Print counter value to Serial Monitor
+  delay(1000);                   // Delay for 1 second
+}
+
+void countInterrupt() {
+  counter++;                     // Increment counter every time pin 2 goes HIGH (RISING edge)
+}
+```
+- **Output:** Pin 2 pe jab bhi **RISING edge** (pin 2 HIGH ho) hoga, `countInterrupt()` function call hoga aur counter increment hoga.
+
+---
+
+### 2. **`detachInterrupt()`**
+#### Kya hai:
+- Ek interrupt ko **disable** karta hai, yani interrupt ko **pin se detach** kar deta hai.
+#### Kaha use hota hai:
+- Jab hume interrupt ko **temporary disable** karna ho.
+
+#### Syntax:
+```cpp
+detachInterrupt(digitalPinToInterrupt(pin));
+```
+- **pin**: Interrupt pin number jahan se interrupt hatawana ho.
+
+#### Example:
+```cpp
+int counter = 0;
+
+void setup() {
+  Serial.begin(9600);            // Start serial communication
+  pinMode(2, INPUT);             // Set pin 2 as input
+  attachInterrupt(digitalPinToInterrupt(2), countInterrupt, RISING);  // Attach interrupt on pin 2
+}
+
+void loop() {
+  Serial.println(counter);       // Print counter value to Serial Monitor
+  delay(1000);                   // Delay for 1 second
+  
+  if(counter > 5) {
+    detachInterrupt(digitalPinToInterrupt(2));  // Detach interrupt after counter exceeds 5
+  }
+}
+
+void countInterrupt() {
+  counter++;                     // Increment counter every time pin 2 goes HIGH (RISING edge)
+}
+```
+- **Output:** Jab counter 5 se zyada ho jayega, tab interrupt ko **detach** kar diya jayega, aur counter uske baad increment nahi hoga.
+
+---
+
+### 3. **`digitalPinToInterrupt()`**
+#### Kya hai:
+- Ek **digital pin number** ko interrupt pin ke format me convert karta hai, jo `attachInterrupt()` function me use hota hai.
+#### Kaha use hota hai:
+- Jab humko ek pin number ko interrupt ke liye valid format me convert karna ho.
+
+#### Syntax:
+```cpp
+digitalPinToInterrupt(pin);
+```
+- **pin**: Digital pin number jisko interrupt ke liye convert karna hai.
+
+#### Example:
+```cpp
+void setup() {
+  Serial.begin(9600);            // Start serial communication
+  pinMode(3, INPUT);             // Set pin 3 as input
+  attachInterrupt(digitalPinToInterrupt(3), interruptFunction, FALLING); // Attach interrupt on pin 3
+}
+
+void loop() {
+  // Main loop does nothing, just waits for interrupts
+}
+
+void interruptFunction() {
+  Serial.println("Interrupt occurred!");
+}
+```
+- **Output:** Jab pin 3 pe **FALLING edge** (pin 3 LOW ho) hota hai, `interruptFunction()` call hoga aur "Interrupt occurred!" Serial Monitor pe print hoga.
+
+---
+
+### **Summary Table**
+
+| **Function**                | **Purpose**                                                 | **Use Case**                                           |
+|-----------------------------|-------------------------------------------------------------|-------------------------------------------------------|
+| **`attachInterrupt()`**     | Attach an interrupt to a pin with a function and mode       | Trigger actions on specific events like pin change    |
+| **`detachInterrupt()`**     | Detach or disable an interrupt for a pin                    | Disable interrupt when it's no longer needed          |
+| **`digitalPinToInterrupt()`** | Convert a digital pin number to interrupt-compatible format | Convert pin number for use in `attachInterrupt()`      |
+
+---
+
+### **Use Case Scenarios:**
+
+1. **Button Press Detection:**
+   - Use `attachInterrupt()` to detect a **button press** or release, and take immediate action without continuously checking the button state in `loop()`.
+
+2. **Sensor Trigger:**
+   - Use interrupts to detect changes in **sensor values** like light, temperature, or motion and take action instantly.
+
+3. **Counting Events:**
+   - Use interrupts to count the number of times a pin’s state changes (e.g., counting button presses or pulses from a sensor).
+
+4. **Disabling Interrupts:**
+   - Use `detachInterrupt()` when you want to **disable** interrupts temporarily (e.g., after a certain number of events).
+
+### **Step-by-Step Example:**
+
+#### Example: Button Press Counter with Interrupts
+```cpp
+int counter = 0;   // Variable to count button presses
+
+void setup() {
+  Serial.begin(9600);                 // Start serial communication
+  pinMode(2, INPUT_PULLUP);           // Set pin 2 as input with internal pull-up resistor
+  attachInterrupt(digitalPinToInterrupt(2), countInterrupt, FALLING);  // Attach interrupt on falling edge (button press)
+}
+
+void loop() {
+  Serial.println(counter);            // Print the button press count
+  delay(1000);                        // Wait for 1 second
+}
+
+void countInterrupt() {
+  counter++;                          // Increment counter when button is pressed (falling edge)
+}
+```
+- **Output:** Jab bhi **button** (pin 2) press hoga, interrupt trigger hoga aur counter increment hoga. Serial Monitor pe har second counter value print hogi.
+
+---
+
+### **Important Notes:**
+- Interrupts main loop ko **pause** karte hain aur directly interrupt function ko call karte hain.
+- **Interrupts** ko use karte waqt code ko **efficiently** likhna zaroori hai, kyunki interrupt function bahut short hona chahiye (1–2 instructions).
+- **Interrupt pin limitations:** Sabhi pins pe interrupts nahi lagte, Arduino boards me kuch specific pins hi interrupt ke liye enabled hote hain (e.g., Arduino Uno me pins 2 aur 3).
+
+Agar koi aur confusion ho ya aur examples chahiye ho toh zarur poochna! 😊
